@@ -27,8 +27,8 @@ app.use(
     })
 );
 
-// Handle browser preflight OPTIONS handshake checks dynamically
-app.options("*", cors());
+// FIX: Swapped out the literal "*" string with a safe regular expression pattern for wildcards
+app.options(/(.*)/, cors());
 
 // 4. Express built-in body parsers
 app.use(express.json());
