@@ -5,25 +5,34 @@ import dbConnection from "./database/dbConnection.js";
 import { errorMiddleware } from "./error/error.js";
 import reservationRoute from "./routes/reservationRoute.js";
 
-const app = express();
-
-// 1. Load environment variables
+// 1. Load environment variables FIRST so process.env values exist for everything below
 dotenv.config({ path: "./config/config.env" });
 
-// 2. Setup CORS with a fallback to prevent crashes if ENV is missing
+const app = express();
+
+// 2. Setup CORS allowing your production Vercel frontend link explicitly
 app.use(
     cors({
-        origin: [process.env.FRONTEND_URL || "http://localhost:5174"], 
-        methods: ["POST", "GET", "PUT", "DELETE"], // Added commonly needed methods
+        origin: [
+            process.env.FRONTEND_URL, 
+            "https://restaurant-frontend-six-livid.vercel.app", // Your live Vercel deployment link
+            "http://localhost:5173",                            // Standard local Vite development fallback
+            "http://localhost:5174"
+        ], 
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
+
+// Handle browser preflight OPTIONS handshake checks dynamically
+app.options("*", cors());
 
 // 3. Express built-in body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
-// 4. Establish Database Connection BEFORE routes
+// 4. Establish Database Connection
 dbConnection(); 
 
 // 5. Mount API routes
