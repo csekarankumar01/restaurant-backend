@@ -1,9 +1,4 @@
 
-
-###  Backend Repository README
-Create a file named `README.md` in your `restaurant-backend` repository and paste this:
-
-```markdown
 # IndianRestro - Backend API
 
 The production-ready RESTful API engine powering **IndianRestro**. Built on the Node.js/Express framework utilizing MongoDB, this backend implements a strict MVC design pattern to securely handle data orchestration, user sessions, system menus, and booking reservations.
